@@ -1,0 +1,150 @@
+import java.util.Scanner;
+
+class Node1{
+    int key ;
+    Node1 left , right ;
+
+    public Node1(int key){
+        this.key = key;
+        left = right = null ;
+    }
+}
+
+class Binary1{
+    Node1 root ;
+
+    public void insert(int key){
+        root = insertAt(root,key);
+    }
+
+    private Node1 insertAt(Node1 root , int key){
+        if (root == null){
+            root = new Node1(key);
+        }
+        if (key < root.key){
+            root.left = insertAt(root.left , key);
+        }
+        else if (key > root.key) {
+            root.right = insertAt(root.right ,key);
+        }
+        return root;
+    }
+
+    public void display(Node1 root){
+        if (root != null){
+            display(root.left);
+            System.out.println(" " + root.key );
+            display(root.right);
+        }
+    }
+
+    public boolean Search(Node1 root , int a){
+        if (root == null){
+            return false;
+        }
+        if (root.key == a){
+            return true;
+        }
+        if (root.key < a){
+            return Search(root.right , a);
+        }
+        else {
+            return Search(root.left ,a);
+        }
+    }
+
+    public void smallest_Element(Node1 root){
+        if (root.left == null){
+            System.out.println(root.key);
+            return;
+        }
+        smallest_Element(root.left);
+    }
+
+    public int largest_Element(Node1 root){
+        while (root.right != null){
+            root = root.right;
+        }
+        return root.key;
+    }
+
+    public Node1 delete_Element(Node1 root, int a){
+        if (root == null){
+            return root;
+        }
+        if (root.key < a){
+            root.right = delete_Element(root.right ,a);
+        }
+        else if (root.key > a) {
+            root.left = delete_Element(root.left ,a);
+        }
+        else {
+            if (root.left == null){
+                return root.right;
+            }
+            else if (root.right == null) {
+                return root.left;
+            }
+            root.key = largest_Element(root.left);
+            root.left = delete_Element(root.left , root.key);
+        }
+        return root;
+    }
+}
+
+public class BinarySearchTree {
+    public static void main(String[] args) {
+        Scanner sc  =  new Scanner(System.in);
+        Binary1 b = new Binary1();
+
+        int repeat;
+        do {
+            System.out.println("Enter the operation you wnat to perform : 1.Insertion  2.Display  3.Search  4.Smallest Element  5.Largest Element  6.Delete");
+            int choice = sc.nextInt();
+            switch (choice){
+                case  1:
+                    System.out.println("Enter the elments : ");
+                    int a = sc.nextInt();
+                    b.insert(a);
+                    break;
+
+                case 2:
+                    System.out.println("The elements are : ");
+                    b.display(b.root);
+                    System.out.println();
+                    break;
+
+                case 3:
+                    System.out.println("Enter the element you want to search :");
+                    int c = sc.nextInt();
+                    if (b.Search(b.root,c)){
+                        System.out.println("Element present");
+                    }
+                    else {
+                        System.out.println("Element absent");
+                    }
+                    break;
+
+                case 4:
+                    System.out.println("Smallest element is : ");
+                    b.smallest_Element(b.root);
+                    break;
+
+                case 5:
+                    System.out.println("Largest element is : " + b.largest_Element(b.root));
+                    break;
+
+                case 6:
+                    System.out.println("Enter the element you want to delete :");
+                    int f = sc.nextInt();
+                    b.delete_Element(b.root,f);
+                    break;
+
+                default:
+                    System.out.println("Invalid choice");
+            }
+            System.out.println("Do you want to continue : 1.Continue  2.Stop");
+            repeat = sc.nextInt();
+        }while (repeat ==1);
+    }
+}
