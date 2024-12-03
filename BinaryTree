@@ -1,0 +1,154 @@
+import java.util.Scanner;
+
+class Node{
+    int data;
+    Node left , right ;
+
+    public Node(int data){
+        this.data = data ;
+        left = right = null ;
+    }
+}
+
+class Binary{
+    Node root ;
+
+    public void insert(int data){
+        Node NewNode = new Node(data) ;
+        if (root == null){
+            root = NewNode;
+        }
+        else{
+            whereToInsert(root , NewNode) ;
+        }
+    }
+
+    private void whereToInsert(Node CurrentNode , Node NewNode){
+        Scanner sc = new Scanner(System.in);
+        int repeat;
+        do {
+            System.out.println("Insert at " + CurrentNode.data + ": 1 for Left, 2 for Right");
+            int b = sc.nextInt();
+            if (b == 1){
+                if (CurrentNode.left == null){
+                    CurrentNode.left = NewNode;
+                    break;
+                }
+                CurrentNode = CurrentNode.left ;
+            }
+            else if(b == 2){
+                if (CurrentNode.right == null){
+                    CurrentNode.right = NewNode;
+                    break;
+                }
+                CurrentNode = CurrentNode.right;
+            }
+            else {
+                System.out.println("Enter a valid choice");
+            }
+            System.out.println("Do you want to continue the process : 1.Continue  2.Stop ");
+            repeat = sc.nextInt();
+        }while (repeat != 0);
+
+    }
+
+    public void display(){
+        inOrder(root);
+    }
+
+    private void inOrder(Node root){
+        if (root == null){
+            return;
+        }
+        inOrder(root.left);
+        System.out.println(" " + root.data);
+        inOrder(root.right);
+    }
+
+    public int Count_Node(Node root){
+        if (root == null){
+            return  0 ;
+        }
+        int count = 1 ;
+        count += Count_Node(root.left);
+        count += Count_Node(root.right);
+        return count;
+    }
+
+    public void Print_Leaves(Node root){
+        if (root == null){
+            return;
+        }
+        if (root.left == null && root.right == null){
+            System.out.println(root.data);
+        }
+        Print_Leaves(root.left);
+        Print_Leaves(root.right);
+    }
+
+    public int Count_Leaves(Node root){
+        if (root == null){
+            return 0;
+        }
+        if (root.left == null && root.right == null){
+            return 1;
+        }
+        else {
+            return Count_Leaves(root.left) + Count_Leaves(root.right);
+        }
+    }
+
+    public int Max_Height(Node root){
+        if (root == null){
+            return  0;
+        }
+        int max = Math.max(Max_Height(root.left) , Max_Height(root.right));
+        return max + 1 ;
+    }
+}
+
+public class Binary_Tree{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Binary b = new Binary();
+        int repeat;
+        do {
+            System.out.println("Enter the operation you want to perform : 1.Insertion  2.Display  3.Count Nodes  4.PrintLeaves  5.Count Leaves  6.Max Height ");
+            int choice = sc.nextInt();
+            switch (choice){
+                case 1 :
+                    System.out.println("Enter the element you want to insert : ");
+                    int a = sc.nextInt();
+                    b.insert(a);
+                    break;
+
+                case  2 :
+                    System.out.println("The inserted elements are : ");
+                    b.display();
+                    break;
+
+                case 3 :
+                    System.out.println("The number of nodes are : " + b.Count_Node(b.root));
+                    break;
+
+                case 4 :
+                    System.out.println("The leaves are : ");
+                    b.Print_Leaves(b.root);
+                    break;
+
+                case 5 :
+                    System.out.println("The number of leaves are : " + b.Count_Leaves(b.root));
+                    break;
+
+                case 6 :
+                    System.out.println("The height is : " + b.Max_Height(b.root));
+                    break;
+
+                default :
+                    System.out.println("Invalid choice");
+            }
+            System.out.println("Do you want to continue : 1.Continue  2.Stop ");
+            repeat = sc.nextInt();
+        }while (repeat == 1);
+    }
+}
