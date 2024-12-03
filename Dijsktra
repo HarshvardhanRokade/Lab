@@ -1,0 +1,65 @@
+package clgJava;
+import java.util.*;
+
+public class DijkstrasA {
+    static int totalvertex = 5;
+
+    public static int min(int[] distance, Boolean[] vis) {
+        int m = Integer.MAX_VALUE;
+        int m_idx = -1;
+        for (int vx = 0; vx < totalvertex; vx++) {
+            if (!vis[vx] && distance[vx] <= m) {
+                m = distance[vx];
+                m_idx = vx;
+            }
+        }
+        return m_idx;
+    }
+
+    public void printSol(int[] distance, int n) {
+        System.out.println("Distances from source 0:");
+        for (int j = 0; j < n; j++) {
+            System.out.println("To " + j + ": " + distance[j]);
+        }
+    }
+
+    public void dijkstra(int[][] graph, int s) {
+        int[] distance = new int[totalvertex];
+        Boolean[] vis = new Boolean[totalvertex];
+
+        for (int j = 0; j < totalvertex; j++) {
+            distance[j] = Integer.MAX_VALUE;
+            vis[j] = false;
+        }
+
+        distance[s] = 0;
+
+        for (int cnt = 0; cnt < totalvertex - 1; cnt++) {
+            int ux = min(distance, vis);
+            vis[ux] = true;
+
+            for (int vx = 0; vx < totalvertex; vx++) {
+                if (!vis[vx] && graph[ux][vx] != Integer.MAX_VALUE && distance[ux] != Integer.MAX_VALUE && distance[ux] + graph[ux][vx] < distance[vx]) {
+                    distance[vx] = distance[ux] + graph[ux][vx];
+                }
+            }
+        }
+        printSol(distance, totalvertex);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int[][] graph = new int[totalvertex][totalvertex];
+
+        System.out.println("Enter the adjacency matrix (use " + Integer.MAX_VALUE + " for no direct edge):");
+        for (int i = 0; i < totalvertex; i++) {
+            for (int j = 0; j < totalvertex; j++) {
+                System.out.println("Enter the element at "+i+" ,"+j);
+                graph[i][j] = sc.nextInt();
+            }
+        }
+
+        DijkstrasA a = new DijkstrasA();
+        a.dijkstra(graph, 0);
+    }
+}
