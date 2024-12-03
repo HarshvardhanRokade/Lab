@@ -1,0 +1,164 @@
+import java.util.*;
+
+class MaxHeapImplementation {
+
+    public static int size = 0;
+    public static int[] arr = new int[10];
+
+    public int leftChild(int parent) {
+        return (2 * parent) + 1;
+    }
+
+    public int rightChild(int parent) {
+        return (2 * parent) + 2;
+    }
+
+    public void insert(int a) {
+        if (size == arr.length) {
+            resize();
+        }
+        arr[size] = a;
+        size++;
+        heapifyUp(size - 1);
+    }
+
+    public void deleteSpecificElement(int value) {
+        int index = -1;
+
+        for (int i = 0; i < size; i++) {
+            if (arr[i] == value) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index == -1) {
+            System.out.println("Element not found.");
+            return;
+        }
+
+        swap(index, size - 1);
+        size--;
+
+        heapifyDown(index);
+        System.out.println("Element deleted!");
+    }
+
+    public void resize() {
+        arr = Arrays.copyOf(arr, arr.length * 2);
+    }
+
+    public void heapifyUp(int index) {
+        int parent = (index - 1) / 2;
+        if (index > 0 && arr[index] > arr[parent]) {
+            swap(index, parent);
+            heapifyUp(parent);
+        }
+    }
+
+    public void heapifyDown(int index) {
+        int left = leftChild(index);
+        int right = rightChild(index);
+        int largest = index;
+
+        if (left < size && arr[left] > arr[largest]) {
+            largest = left;
+        }
+
+        if (right < size && arr[right] > arr[largest]) {
+            largest = right;
+        }
+
+        if (largest != index) {
+            swap(index, largest);
+            heapifyDown(largest);
+        }
+    }
+
+    public void swap(int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public void deleteRoot() {
+        if (size == 0) {
+            System.out.println("Heap is empty.");
+            return;
+        }
+        arr[0] = arr[size - 1];
+        size--;  // Reduce size
+        heapifyDown(0);
+    }
+
+    public void maximumElement() {
+        if (size == 0) {
+            System.out.println("Heap is empty.");
+        } else {
+            System.out.println("Maximum Element: " + arr[0]);
+        }
+    }
+
+    public void display() {
+        if (size == 0) {
+            System.out.println("Heap is empty.");
+        } else {
+            System.out.println("MaxHeap Elements: ");
+            for (int i = 0; i < size; i++) {
+                System.out.print(arr[i] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        MaxHeapImplementation pq = new MaxHeapImplementation();
+        int repeat;
+
+        do {
+            System.out.println("\nChoose an operation:");
+            System.out.println("1. Insert");
+            System.out.println("2. Display Heap");
+            System.out.println("3. Delete Element");
+            System.out.println("4. Show Maximum Element");
+            System.out.println("5. Delete Root Element");
+
+            int choice = sc.nextInt();
+            switch (choice) {
+                case 1:
+                    System.out.println("Enter the number you want to insert:");
+                    int a = sc.nextInt();
+                    pq.insert(a);
+                    break;
+
+                case 2:
+                    pq.display();
+                    break;
+
+                case 3:
+                    System.out.println("Enter the element you want to delete:");
+                    int value = sc.nextInt();
+                    pq.deleteSpecificElement(value);
+                    break;
+
+                case 4:
+                    pq.maximumElement();
+                    break;
+
+                case 5:
+                    pq.deleteRoot();
+                    break;
+
+                default:
+                    System.out.println("Invalid choice, please try again.");
+                    break;
+            }
+
+            System.out.println("Do you want to perform another operation? (0 for Yes, 1 for No):");
+            repeat = sc.nextInt();
+        } while (repeat == 0);
+
+        sc.close();
+    }
+}
